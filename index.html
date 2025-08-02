@@ -2,14 +2,51 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Копилка</title>
-  <script defer src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script defer src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-  <script defer src="https://unpkg.com/framer-motion/dist/framer-motion.umd.js"></script>
-  <script defer src="app.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Оценка склонности к отёкам</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 400px;
+    }
+    h2 {
+      margin-bottom: 1.5rem;
+      font-size: 1.2rem;
+      color: #333;
+    }
+    button {
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background: #CF2C02;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #a62100;
+    }
+  </style>
 </head>
-<body style="font-family:sans-serif;text-align:center;background:#fff5f5;padding:2rem;">
-  <div id="root"></div>
+<body>
+
+  <div class="container">
+    <h2>Узнать, есть ли у меня склонность к отёкам?</h2>
+    <button id="startBtn">Начать тест</button>
+  </div>
+
 </body>
 </html>
