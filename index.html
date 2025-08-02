@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Тест на склонность к отёкам</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f4f8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+    }
+    h2 { margin-bottom: 1rem; font-size: 1.3rem; }
+    .options label { display: block; margin: 0.5rem 0; text-align: left; cursor: pointer; }
+    button {
+      margin-top: 1rem;
+      padding: 0.6rem 1rem;
+      background: #CF2C02;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    input[type="number"] {
+      width: 45%;
+      padding: 0.5rem;
+      margin: 0.3rem;
+    }
+    #bmiValue { margin-top: 0.5rem; font-weight: bold; }
+    img { max-width: 100%; border-radius: 6px; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="quiz">
+    <h2>Узнать, есть ли у меня склонность к отёкам?</h2>
+    <button id="startBtn">Начать тест</button>
+  </div>
+
+  <script>
+    const slides = [
+      { question: "1. Возраст", options: [
+        { text: "До 25 лет", value: 0 },
+        { text: "26–35 лет", value: 1 },
+        { text: "36–45 лет", value: 2 },
+        { text: "Старше 45 лет", value: 3 }
+      ]},
+      { question: "2. Вес и рост (для расчёта ИМТ)", type: "bmi" },
+      { question: "3. Образ жизни", options: [
+        { text: "Активный весь день", value: 0 },
+        { text: "Сидячая работа + активность", value: 1 },
+        { text: "Преимущественно сидячий", value: 2 }
+      ]},
+      { question: "4. Физическая активность", options: [
+        { text: "3+ тренировки в неделю", value: 0 },
+        { text: "1–2 тренировки в неделю", value: 1 },
+        { text: "Никаких тренировок", value: 2 }
+      ]},
+      { question: "5. День цикла", options: [
+        { text: "5–14 день", value: 0 },
+        { text: "15–28 день", value: 2 },
+        { text: "1–4 день или нет цикла", value: 1 }
+      ]},
+      { question: "6. Хронические заболевания", options: [
+        { text: "Нет", value: 0 },
+        { text: "Есть, без симптомов", value: 2 },
+        { text: "Есть, с симптомами", value: 3 }
+      ]},
+      { question: "7. Приём препаратов", options: [
+        { text: "Нет", value: 0 },
+        { text: "Иногда", value: 1 },
+        { text: "Регулярно", value: 2 }
+      ]},
+      { question: "8. Замечаете ли вы отёки?", options: [
+        { text: "Нет", value: 0 },
+        { text: "Иногда", value: 1 },
+        { text: "Часто", value: 2 }
+      ]}
+    ];
+
+    const results = {
+      low: {
+        text: "Просто восхитительно! 🥳 У вас низкая склонность к отёчности. Отеки маловероятны или кратковременны 🔥<br><br>🔸 Избегайте резкого повышения натрия (соль, фастфуд)<br>🔸 Поддерживайте текущее состояние шагательными тренировками<br><br>В клубе ШАГАЙ ДОМА⚡ 280+ тренировок, которые помогут вам поддерживать фигуру и не дадут отекам появиться!<br><br>Избавься от лишней воды в теле с помощью наших эффективных противоотечных тренировок! ⬇️",
+        img: "low.jpg"
+      },
+      medium: {
+        text: "У вас умеренная склонность к отёчности! 🤗 Это значит, что отеки могут появляться на фоне цикла, питания, жары или малоподвижности.<br><br>🔸 Следите за натрием в питании<br>🔸 Используйте мягкие лимфодренажные средства (массаж, отвар петрушки)<br>🔸 Больше движения, особенно вечером – идеально выполнять 1-2 шагательные тренировки в день<br><br>Чтобы избавиться от отёков и сократить их частоту, начните заниматься по нашим анти-отёчным тренировкам уже сегодня!<br><br>В клубе ШАГАЙ ДОМА⚡ 280+ тренировок, которые помогут поддерживать фигуру и не дадут отекам появиться!<br><br>Избавься от лишней воды в теле уже сегодня ⬇️",
+        img: "medium.jpg"
+      },
+      high: {
+        text: "Ой! У вас высокая склонность к отёчности 😔. Отеки могут быть частыми и сигнализировать о необходимости перемен.<br><br>🔸 Обратитесь к врачу (кардиолог, эндокринолог) и сдайте анализы<br>🔸 Контроль соли и жидкости<br>🔸 Повышение физической активности – добавить ежедневные тренировки.<br><br>Чтобы отёки не портили настроение и внешний вид, начните заниматься по нашим анти-отёчным тренировкам уже сегодня!<br><br>В клубе ШАГАЙ ДОМА⚡ 280+ тренировок, которые не дадут отёкам испортить ваш внешний вид!<br><br>Избавься от лишней воды в теле с помощью наших эффективных и проверенных программ! ⬇️",
+        img: "high.jpg"
+      }
+    };
+
+    let current = 0;
+    let score = 0;
+    const quiz = document.getElementById("quiz");
+    document.getElementById("startBtn").addEventListener("click", showSlide);
+
+    function showSlide() {
+      const s = slides[current];
+      quiz.innerHTML = `<h2>${s.question}</h2>`;
+
+      if (s.type === "bmi") {
+        quiz.innerHTML += `
+          <input type="number" id="weight" placeholder="Вес (кг)">
+          <input type="number" id="height" placeholder="Рост (см)">
+          <p id="bmiValue"></p>
+        `;
+        const btn = document.createElement("button");
+        btn.textContent = current < slides.length - 1 ? "Далее" : "Завершить";
+        btn.disabled = true;
+        quiz.appendChild(btn);
+
+        const weightInput = quiz.querySelector("#weight");
+        const heightInput = quiz.querySelector("#height");
+        const bmiValue = quiz.querySelector("#bmiValue");
+
+        function checkInputs() {
+          const w = parseFloat(weightInput.value);
+          const h = parseFloat(heightInput.value);
+          if (w > 0 && h > 0) {
+            const bmi = w / ((h/100) ** 2);
+            bmiValue.textContent = "Ваш ИМТ: " + bmi.toFixed(1);
+            btn.disabled = false;
+
+            score += bmi < 22 ? 0 : bmi < 25 ? 1 : bmi < 30 ? 2 : 3;
+          }
+        }
+        weightInput.addEventListener("input", checkInputs);
+        heightInput.addEventListener("input", checkInputs);
+
+        btn.addEventListener("click", nextSlide);
+
+      } else {
+        s.options.forEach(o => {
+          const label = document.createElement("label");
+          label.innerHTML = `<input type="radio" name="opt" value="${o.value}"> ${o.text}`;
+          quiz.appendChild(label);
+        });
+
+        const btn = document.createElement("button");
+        btn.textContent = current < slides.length - 1 ? "Далее" : "Завершить";
+        btn.disabled = true;
+        quiz.appendChild(btn);
+
+        quiz.querySelectorAll("input").forEach(input =>
+          input.addEventListener("change", () => { btn.disabled = false; })
+        );
+
+        btn.addEventListener("click", () => {
+          const val = quiz.querySelector("input[name='opt']:checked").value;
+          score += parseInt(val);
+          nextSlide();
+        });
+      }
+    }
+
+    function nextSlide() {
+      current++;
+      if (current < slides.length) {
+        showSlide();
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      let res;
+      if (score <= 6) res = results.low;
+      else if (score <= 13) res = results.medium;
+      else res = results.high;
+
+      quiz.innerHTML = `
+        <h2>${res.text}</h2>
+        <img src="${res.img}" alt="Результат">
+        <a href="https://walk-walk.ru/?utm_source=quiz" target="_blank">
+          <button>Перейти к тренировкам</button>
+        </a>
+      `;
+    }
+  </script>
+</body>
+  </html>
